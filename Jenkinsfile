@@ -14,28 +14,26 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t suresh394/kubernetes .'
+                    sh 'docker build -t phani997/kubernetes .'
                 }
             }
         }
-        stage('Push image to hub'){
+         stage('Push image to hub'){
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-                    sh 'docker login -u suresh394 -p ${dockerhubpwd}'
-                        
+                    withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerhub')]) {
+                    sh 'docker login -u phani997 -p ${dockerhub}'
                     }
-                    sh 'docker push suresh394/kubernetes'
+                  sh 'docker push phani997/kubernetes'
                 }
             }
         }
-        stage('Deploy to K8s'){
+         stage('Deploy to K8s'){
             steps{
                 script{
                     kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'kubeconfig')
                 }
             }
         }
-    
-    }    
+    }
 }
